@@ -15,22 +15,22 @@ on:
         description: endDatetime
         default: '2024-03-17T00:00:00Z'
       min_lon:
-        type: float
+        type: string
         required: true
         description: min_lon
         default: -122.12
       min_lat:
-        type: float
+        type: string
         required: true
         description: min_lat
         default: 46.6
       max_lon:
-        type: float
+        type: string
         required: true
         description: max_lon
         default: -121.35
       max_lat:
-        type: float
+        type: string
         required: true
         description: max_lat
         default: 47.1
