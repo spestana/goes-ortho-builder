@@ -109,7 +109,7 @@ jobs:
                 shell: bash -el {0}           
         steps:
             - name: Checkout Repository
-              uses: uses: actions/checkout@v3
+              uses: actions/checkout@v3
               
             - name: Set up Python 3.10
               uses: actions/setup-python@v3
