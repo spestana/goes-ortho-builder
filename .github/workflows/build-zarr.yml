@@ -129,17 +129,15 @@ jobs:
                 pip install goespy@git+https://github.com/spestana/goes-py
                 pip install gtsa@git+https://github.com/friedrichknuth/gtsa
 
-            # NOTE: be sure to share Organization Secrets with this repository
-            #- name: Run build-zarr script
-            #  env: 
-            #    OPENTOPO_API_KEY: ${{ secrets.OPENTOPO_API_KEY }}
-            #  run: |
-            #    python -m hyp3_isce2 ++process insar_tops_burst \
-            #        ${{ inputs.startDatetime }} \
-            #        ${{ inputs.secondary }} \
-            #        --looks ${{ inputs.looks }} \
-            #        --apply-water-mask ${{ inputs.apply_water_mask }} 
-            #
+             NOTE: be sure to share Organization Secrets with this repository
+            - name: Run build-zarr script
+              env: 
+                OPENTOPO_API_KEY: ${{ secrets.OPENTOPO_API_KEY }}
+              run: |
+                echo \
+                    ${{ inputs.startDatetime }} \
+                    ${{ inputs.endDatetime }}
+            
             #- name: Upload Hyp3-ISCE2 Output Folder
             #  uses: actions/upload-artifact@v4
             #  with:
@@ -148,4 +146,4 @@ jobs:
             #    path: |
             #        S1_*INT*
             #        !S1_*.zip
-            #        
+                    
