@@ -1,5 +1,5 @@
 # Build a zarr file
-name: build-zarr
+name: Build
 run-name: ${{ inputs.workflow_name }}
 
 # Set workflow input parameters and defaults
