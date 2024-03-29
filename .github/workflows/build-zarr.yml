@@ -1,147 +1,148 @@
-# Build a zarr file
+---
 name: Build
 run-name: ${{ inputs.workflow_name }}
-
-# Set workflow input parameters and defaults
 on:
   workflow_dispatch:
     inputs:
-        startDatetime:
-            type: string
-            required: true
-            description: startDatetime
-            default: '2024-03-10T000000Z'
-        endDatetime:
-            type: string
-            required: true
-            description: endDatetime
-            default: '2024-03-17T000000Z'
-        min_lon:
-            type: float
-            required: true
-            description: min_lon
-            default: -122.12
-        min_lat:
-            type: float
-            required: true
-            description: min_lat
-            default: 46.6
-        max_lon:
-            type: float
-            required: true
-            description: max_lon
-            default: -121.35
-        max_lat:
-            type: float
-            required: true
-            description: max_lat
-            default: 47.1
-        satellite:
-            type: choice
-            required: true
-            description: satellite
-            default: goes18
-            options: ['goes16', 'goes17', 'goes18']
-        product:
-            type: choice
-            required: true
-            description: product
-            default: ABI-L1b-RadC
-            options: ['ABI-L1b-RadC', 'ABI-L1b-RadF']
-        product:
-            type: choice
-            required: true
-            description: product
-            default: ABI-L1b-RadC
-            options: ['ABI-L1b-RadC', 'ABI-L1b-RadF']
-        band:
-            type: choice
-            required: true
-            description: band
-            default: 7
-            options: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
-        workflow_name:
-            description: 'Custom workflow name'
-            required: false
-            default: 'goes-build-zarr'
-            type: string
-
-  # Must duplicate inputs for workflow_call (https://github.com/orgs/community/discussions/39357)
+      startDatetime:
+        type: string
+        required: true
+        description: startDatetime
+        default: 2024-03-10T000000Z
+      endDatetime:
+        type: string
+        required: true
+        description: endDatetime
+        default: 2024-03-17T000000Z
+      min_lon:
+        type: float
+        required: true
+        description: min_lon
+        default: -122.12
+      min_lat:
+        type: float
+        required: true
+        description: min_lat
+        default: 46.6
+      max_lon:
+        type: float
+        required: true
+        description: max_lon
+        default: -121.35
+      max_lat:
+        type: float
+        required: true
+        description: max_lat
+        default: 47.1
+      satellite:
+        type: choice
+        required: true
+        description: satellite
+        default: goes18
+        options:
+          - goes16
+          - goes17
+          - goes18
+      product:
+        type: choice
+        required: true
+        description: product
+        default: ABI-L1b-RadC
+        options:
+          - ABI-L1b-RadC
+          - ABI-L1b-RadF
+      band:
+        type: choice
+        required: true
+        description: band
+        default: 7
+        options:
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+          - 6
+          - 7
+          - 8
+          - 9
+          - 10
+          - 11
+          - 12
+          - 13
+          - 14
+          - 15
+          - 16
+      workflow_name:
+        description: Custom workflow name
+        required: false
+        default: goes-build-zarr
+        type: string
   workflow_call:
     inputs:
-        startDatetime:
-            type: string
-            description: startDatetime
-        endDatetime:
-            type: string
-            description: endDatetime
-        min_lon:
-            type: float
-            description: min_lon
-        min_lat:
-            type: float
-            description: min_lat
-        max_lon:
-            type: float
-            description: max_lon
-        max_lat:
-            type: float
-            description: max_lat
-        satellite:
-            type: string
-            description: satellite
-        product:
-            type: string
-            description: product
-        band:
-            type: int
-            description: band
-        workflow_name:
-            description: 'Custom workflow name'
-            type: string
-
+      startDatetime:
+        type: string
+        description: startDatetime
+      endDatetime:
+        type: string
+        description: endDatetime
+      min_lon:
+        type: float
+        description: min_lon
+      min_lat:
+        type: float
+        description: min_lat
+      max_lon:
+        type: float
+        description: max_lon
+      max_lat:
+        type: float
+        description: max_lat
+      satellite:
+        type: string
+        description: satellite
+      product:
+        type: string
+        description: product
+      band:
+        type: int
+        description: band
+      workflow_name:
+        description: Custom workflow name
+        type: string
 jobs:
-    build-zarr:
-        name: ${{ inputs.workflow_name }}
-        runs-on: ubuntu-latest
+  build-zarr:
+    name: ${{ inputs.workflow_name }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+      - name: Add conda to system path
+        run: |
+          echo $CONDA/bin >> $GITHUB_PATH
+      - name: Install mamba and dependencies
+        run: >
+          conda install mamba -c conda-forge
 
-        steps:
-            - name: Checkout Repository
-              uses: actions/checkout@v3
+          mamba env update --file environment.yml --name goesenv
 
-            - name: Set up Python 3.10
-              uses: actions/setup-python@v3
-              with:
-                python-version: '3.10'
-            
-            - name: Add conda to system path
-              run: |
-                echo $CONDA/bin >> $GITHUB_PATH
-            - name: Install mamba and dependencies
-              run: |
-                conda install mamba -c conda-forge
-                mamba env update --file environment.yml --name goesenv
-                source $CONDA/etc/profile.d/conda.sh
-                conda activate goesenv
-                pip install goes_ortho@git+https://github.com/spestana/goes-ortho/tree/re-org
-                pip install goespy@git+https://github.com/spestana/goes-py
-                pip install gtsa@git+https://github.com/friedrichknuth/gtsa
+          source $CONDA/etc/profile.d/conda.sh
 
-             NOTE: be sure to share Organization Secrets with this repository
-            - name: Run build-zarr script
-              env: 
-                OPENTOPO_API_KEY: ${{ secrets.OPENTOPO_API_KEY }}
-              run: |
-                echo \
-                    ${{ inputs.startDatetime }} \
-                    ${{ inputs.endDatetime }}
-            
-            #- name: Upload Hyp3-ISCE2 Output Folder
-            #  uses: actions/upload-artifact@v4
-            #  with:
-            #    name: ${{ inputs.workflow_name }}
-            #    # Exclude redundant zipped output folder from hyp3-isce2
-            #    path: |
-            #        S1_*INT*
-            #        !S1_*.zip
-                    
+          conda activate goesenv
+
+          pip install goes_ortho@git+https://github.com/spestana/goes-ortho/tree/re-org
+
+          pip install goespy@git+https://github.com/spestana/goes-py
+
+          pip install gtsa@git+https://github.com/friedrichknuth/gtsa
+      - name: Run build-zarr script
+        env:
+          OPENTOPO_API_KEY: ${{ secrets.OPENTOPO_API_KEY }}
+        run: |
+          echo \
+              ${{ inputs.startDatetime }} \
+              ${{ inputs.endDatetime }}
