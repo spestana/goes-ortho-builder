@@ -124,6 +124,7 @@ gh run download 8073568114 --dir /tmp --pattern "*20200220*"
 
 * The workflow requires the following Actions secrets. Links below to set up free accounts with these data providers.
   * `EARTHDATA_USERNAME` & `EARTHDATA_PASSWORD` (to download S1 Images from ASF DAAC https://urs.earthdata.nasa.gov)
+    * You must also agree to the EULA [here](https://auth.asf.alaska.edu/)
   * `ESA_USERNAME` & `ESA_PASSWORD` (to download Sentinel-1 precise orbits from https://dataspace.copernicus.eu)
 
 
