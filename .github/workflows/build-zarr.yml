@@ -55,24 +55,24 @@ on:
         type: choice
         required: true
         description: band
-        default: 7
+        default: '7'
         options:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 12
-          - 13
-          - 14
-          - 15
-          - 16
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '12'
+          - '13'
+          - '14'
+          - '15'
+          - '16'
       workflow_name:
         description: Custom workflow name
         required: false
@@ -87,16 +87,16 @@ on:
         type: string
         description: endDatetime
       min_lon:
-        type: float
+        type: string
         description: min_lon
       min_lat:
-        type: float
+        type: string
         description: min_lat
       max_lon:
-        type: float
+        type: string
         description: max_lon
       max_lat:
-        type: float
+        type: string
         description: max_lat
       satellite:
         type: string
@@ -105,7 +105,7 @@ on:
         type: string
         description: product
       band:
-        type: int
+        type: string
         description: band
       workflow_name:
         description: Custom workflow name
