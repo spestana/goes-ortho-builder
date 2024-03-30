@@ -139,11 +139,13 @@ jobs:
           pip install goespy@git+https://github.com/spestana/goes-py
 
           pip install gtsa@git+https://github.com/friedrichknuth/gtsa
+
+          mamba init
       - name: Run build-zarr script
         env:
           OPENTOPO_API_KEY: ${{ secrets.OPENTOPO_API_KEY }}
         run: |
-          mamba init; source /home/runner/.bashrc; mamba activate goesenv; python -c "\
+          mamba activate goesenv; python -c "\
           import goes_ortho as go; \
           go.get_data.make_request_json('${{ inputs.workflow_name }}', '(${{ inputs.startDatetime }}', '${{ inputs.endDatetime }}', \
           [${{ inputs.min_lon }}, ${{ inputs.min_lat }}, ${{ inputs.max_lon }}, ${{ inputs.max_lat }}], \
