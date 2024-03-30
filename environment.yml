@@ -37,5 +37,5 @@ dependencies:
   - pip
   - pip:
     - "--editable=git+https://github.com/spestana/goes-py#egg=goespy"
-    - "--editable=git+https://github.com/spestana/goes-ortho@re-org#egg=goespy"
+    - "--editable=git+https://github.com/spestana/goes-ortho@re-org#egg=goes_ortho"
     - "--editable=git+https://github.com/friedrichknuth/gtsa#egg=gtsa"
