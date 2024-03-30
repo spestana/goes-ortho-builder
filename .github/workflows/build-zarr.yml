@@ -81,11 +81,11 @@ on:
         options:
           - Rad
           - DQF
-      workflow_name:
-        description: Custom workflow name
-        required: false
-        default: goes-build-zarr
-        type: string
+      #workflow_name:
+      #  description: Custom workflow name
+      #  required: false
+      #  default: goes-build-zarr
+      #  type: string
   workflow_call:
     inputs:
       startDatetime:
@@ -118,12 +118,12 @@ on:
       variable:
         type: string
         description: variable
-      workflow_name:
-        description: Custom workflow name
-        type: string
+      #workflow_name:
+      #  description: Custom workflow name
+      #  type: string
 jobs:
   build-zarr:
-    name: ${{ inputs.workflow_name }}
+    name: goes-build-zarr
     runs-on: ubuntu-latest
     defaults:
         run:
@@ -144,7 +144,7 @@ jobs:
         run: |
           python -c "\
           import goes_ortho as go; \
-          go.get_data.make_request_json('${{ inputs.workflow_name }}', '${{ inputs.startDatetime }}', '${{ inputs.endDatetime }}', \
+          go.get_data.make_request_json('goes-build-zarr', '${{ inputs.startDatetime }}', '${{ inputs.endDatetime }}', \
           [${{ inputs.min_lon }}, ${{ inputs.min_lat }}, ${{ inputs.max_lon }}, ${{ inputs.max_lat }}], \
           '${{ inputs.satellite }}', '${{ inputs.product }}', ${{ inputs.band }}, '${{ inputs.variable }}', '${{ secrets.OPENTOPO_API_KEY }}')"
         shell: micromamba-shell {0}
@@ -154,11 +154,11 @@ jobs:
         run: |
           python -c "\
           import goes_ortho as go; \
-          go.get_data.build_zarr('${{ inputs.workflow_name }}.json')"
+          go.get_data.build_zarr('goes-build-zarr.json')"
         shell: micromamba-shell {0}
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{ inputs.workflow_name }}
+          name: goes-build-zarr
           path: |
             *.json
             *.zarr
