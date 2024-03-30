@@ -1,0 +1,41 @@
+name: goesenv
+channels:  
+  - conda-forge
+dependencies:
+  - boto3
+  - ipykernel
+  - numpy
+  - pandas
+  - matplotlib
+  - xarray
+  - rioxarray
+  - gdal
+  - pyproj
+  - pathlib
+  - requests
+  - rasterio
+  - netcdf4
+  - h5netcdf
+  - zarr
+  - dask
+  - awscli
+  - s3fs
+  - fsspec
+  - gdown
+  - aiohttp
+  - scipy
+  - geopandas
+  - opencv
+  - folium
+  - distributed
+  - tqdm
+  - pytest
+  - nb_conda_kernels
+  - hvplot
+  - black
+  - flake8
+  - pip
+  - pip:
+    - "--editable=git+https://github.com/spestana/goes-py#egg=goespy"
+    - "--editable=git+https://github.com/spestana/goes-ortho@re-org#egg=goespy"
+    - "--editable=git+https://github.com/friedrichknuth/gtsa#egg=gtsa"
