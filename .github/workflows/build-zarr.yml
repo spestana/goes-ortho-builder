@@ -136,3 +136,4 @@ jobs:
           go.get_data.make_request_json('${{ inputs.workflow_name }}', '(${{ inputs.startDatetime }}', '${{ inputs.endDatetime }}', \
           [${{ inputs.min_lon }}, ${{ inputs.min_lat }}, ${{ inputs.max_lon }}, ${{ inputs.max_lat }}], \
           '${{ inputs.satellite }}', '${{ inputs.product }}', ${{ inputs.band }}, '${{ inputs.variable }}', '${{ secrets.OPENTOPO_API_KEY }}')"
+        shell: micromamba-shell {0}
