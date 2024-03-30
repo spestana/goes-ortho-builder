@@ -134,7 +134,7 @@ jobs:
 
           conda activate goesenv
 
-          pip install goes_ortho@git+https://github.com/spestana/goes-ortho/tree/re-org
+          pip install goes_ortho@git+https://github.com/spestana/goes-ortho@re-org
 
           pip install goespy@git+https://github.com/spestana/goes-py
 
