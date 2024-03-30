@@ -13,7 +13,7 @@ on:
         type: string
         required: true
         description: endDatetime
-        default: '2024-03-17T00:00:00Z'
+        default: '2024-03-10T00:59:00Z'
       min_lon:
         type: string
         required: true
@@ -149,12 +149,20 @@ jobs:
           '${{ inputs.satellite }}', '${{ inputs.product }}', ${{ inputs.band }}, '${{ inputs.variable }}', '${{ secrets.OPENTOPO_API_KEY }}')"
         shell: micromamba-shell {0}
       - name: Download GOES imagery and build zarr file
-        env:
-          OPENTOPO_API_KEY: ${{ secrets.OPENTOPO_API_KEY }}
         run: |
           python -c "\
           import goes_ortho as go; \
           go.get_data.build_zarr('goes-build-zarr.json')"
+        shell: micromamba-shell {0}
+      - name: Make preview gif animation
+        run: |
+          python -c "\
+          import xarray as xr; import geogif; \
+          ds = xr.open_zarr('goes-build-zarr.zarr'); \
+          da = ds.${{ inputs.product }}
+          gif_bytes = geogif.dgif(da, fps=5, cmap="Greys_r", date_format=r"%Y-%m-%d %H:%M:%S", date_position="ul", bytes=True).compute(); \
+          with open("goes.gif", "wb") as f:\
+              f.write(gif_bytes);"
         shell: micromamba-shell {0}
       - uses: actions/upload-artifact@v4
         with:
@@ -162,3 +170,4 @@ jobs:
           path: |
             *.json
             *.zarr
+            *.gif
