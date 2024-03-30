@@ -123,15 +123,6 @@ jobs:
           cache-environment: true
           environment-file: environment.yml
           environment-name: goesenv
-      - name: Install additional dependencies
-        run: >
-          mamba activate goesenv
-
-          pip install goes_ortho@git+https://github.com/spestana/goes-ortho@re-org
-
-          pip install goespy@git+https://github.com/spestana/goes-py
-
-          pip install gtsa@git+https://github.com/friedrichknuth/gtsa
       - name: Run build-zarr script
         env:
           OPENTOPO_API_KEY: ${{ secrets.OPENTOPO_API_KEY }}
