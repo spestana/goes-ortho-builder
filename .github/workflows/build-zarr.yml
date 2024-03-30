@@ -143,7 +143,7 @@ jobs:
         env:
           OPENTOPO_API_KEY: ${{ secrets.OPENTOPO_API_KEY }}
         run: |
-          source ~/.bashrc; mamba init; mamba activate goesenv; python -c "\
+          mamba init; source ~/.bashrc; mamba activate goesenv; python -c "\
           import goes_ortho as go; \
           go.get_data.make_request_json('${{ inputs.workflow_name }}', '(${{ inputs.startDatetime }}', '${{ inputs.endDatetime }}', \
           [${{ inputs.min_lon }}, ${{ inputs.min_lat }}, ${{ inputs.max_lon }}, ${{ inputs.max_lat }}], \
