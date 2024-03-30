@@ -127,7 +127,7 @@ jobs:
           environment-file: environment.yml
           init-shell: bash
           environment-name: goesenv
-      - name: Run build-zarr script
+      - name: Make request file from user input
         env:
           OPENTOPO_API_KEY: ${{ secrets.OPENTOPO_API_KEY }}
         run: |
@@ -137,8 +137,17 @@ jobs:
           [${{ inputs.min_lon }}, ${{ inputs.min_lat }}, ${{ inputs.max_lon }}, ${{ inputs.max_lat }}], \
           '${{ inputs.satellite }}', '${{ inputs.product }}', ${{ inputs.band }}, '${{ inputs.variable }}', '${{ secrets.OPENTOPO_API_KEY }}')"
         shell: micromamba-shell {0}
+      - name: Download GOES imagery and build zarr file
+        env:
+          OPENTOPO_API_KEY: ${{ secrets.OPENTOPO_API_KEY }}
+        run: |
+          python -c "\
+          import goes_ortho as go; \
+          go.get_data.build_zarr('${{ inputs.workflow_name }}.json')"
+        shell: micromamba-shell {0}
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.workflow_name }}
           path: |
             *.json
+            *.zarr
