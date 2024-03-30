@@ -73,6 +73,14 @@ on:
           - '14'
           - '15'
           - '16'
+      variable:
+        type: choice
+        required: true
+        description: band
+        default: 'Rad'
+        options:
+          - 'Rad'
+          - 'DQF'
       workflow_name:
         description: Custom workflow name
         required: false
@@ -107,6 +115,9 @@ on:
       band:
         type: string
         description: band
+      variable:
+        type: string
+        description: variable
       workflow_name:
         description: Custom workflow name
         type: string
