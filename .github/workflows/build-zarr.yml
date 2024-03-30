@@ -76,7 +76,7 @@ on:
       variable:
         type: choice
         required: true
-        description: band
+        description: variable
         default: 'Rad'
         options:
           - 'Rad'
