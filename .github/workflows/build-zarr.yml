@@ -77,10 +77,10 @@ on:
         type: choice
         required: true
         description: variable
-        default: 'Rad'
+        default: Rad
         options:
-          - 'Rad'
-          - 'DQF'
+          - Rad
+          - DQF
       workflow_name:
         description: Custom workflow name
         required: false
