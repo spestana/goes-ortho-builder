@@ -114,20 +114,24 @@ jobs:
   build-zarr:
     name: ${{ inputs.workflow_name }}
     runs-on: ubuntu-latest
+    defaults:
+        run:
+            shell: bash -el {0}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install Conda environment with Micromamba
         uses: mamba-org/setup-micromamba@v1
         with:
           cache-environment: true
           environment-file: environment.yml
           environment-name: goesenv
+          activate-environment: goesenv
       - name: Run build-zarr script
         env:
           OPENTOPO_API_KEY: ${{ secrets.OPENTOPO_API_KEY }}
         run: |
-          micromamba activate goesenv; python -c "\
+          python -c "\
           import goes_ortho as go; \
           go.get_data.make_request_json('${{ inputs.workflow_name }}', '(${{ inputs.startDatetime }}', '${{ inputs.endDatetime }}', \
           [${{ inputs.min_lon }}, ${{ inputs.min_lat }}, ${{ inputs.max_lon }}, ${{ inputs.max_lat }}], \
