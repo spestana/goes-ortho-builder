@@ -140,4 +140,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.workflow_name }}
-          path: *.json
+          path: |
+            *.json
