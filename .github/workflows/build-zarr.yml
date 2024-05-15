@@ -159,7 +159,7 @@ jobs:
           python -c "\
           import xarray as xr; import geogif; \
           ds = xr.open_zarr('goes-build-zarr.zarr'); \
-          da = ds.${{ inputs.product }}
+          da = ds.${{ inputs.product }}; \
           gif_bytes = geogif.dgif(da, fps=5, cmap='Greys_r', date_format='%Y-%m-%d %H:%M:%S', date_position='ul', bytes=True).compute(); \
           with open('goes.gif', 'wb') as f: f.write(gif_bytes);"
         shell: micromamba-shell {0}
