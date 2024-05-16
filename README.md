@@ -1,15 +1,26 @@
 # GOES Ortho Builder
 This repository allows you to run [goespy](https://github.com/spestana/goes-py) and [goes-ortho](https://github.com/spestana/goes-ortho) utilities to download, orthorectify (apply a terrain correction), and build a zarr file of GOES-R ABI imagery through a Github Actions interface.
 
-You can fork this repository and add your own `OPENTOPO_API_KEY`, then manually run the workflow from the '[Actions](https://github.com/spestana/goes-ortho-builder/actions/workflows/build-zarr.yml)' repository tab.
 
+## How to use GOES Ortho Builder
 
-## Configuration
+* Fork this repository
+* Make a user account and generate an API key for [OpenTopography.org](https://portal.opentopography.org/requestService?service=api)
+* Create an [Actions secret](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions) for this API key: `OPENTOPO_API_KEY` (This allows the workflow to download a DEM from OpenTopography.org, used for the terrain correction applied to the imagery)
+* Under the *Actions* repository tab, click on the *Build* workflow
+* Select the *Run workflow* dropdown menu, and specify the required information:
+  * **Use workflow from**: Branch: main
+  * **startDatetime**: starting date and time to get GOES imagery (in the format `YYYY-MM-DDThh:mm:ssZ`, all times UTC)
+  * **endDatetime**: end date and time to get GOES imagery
+  * **min_lon**: minimum longitude bound of the region to retrieve imagery for
+  * **min_lat**: minimum latitude bound
+  * **max_lon**: maximum longitude bound
+  * **max_lat**: maximum longitude bound
+  * **satellite**: goes16, goes17, or goes18 (
+  * **product**: ABI imagery product (currently limited to top of atmosphere radiance products for CONUS and Full Disk)
+  * **band**: ABI band if applicable for the selected product (otherwise this field is ignored)
+  * **variable**: Variable from the selected product if applicable (otherwise this field is ignored) (currently limited to Radiance and Data Quality Field variables)
 
-The workflow requires the following [Actions secret](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions):
-* `OPENTOPO_API_KEY`
-  * This allows the utilities to download a DEM from [OpenTopography.org](https://www.opentopography.org/), used for the terrain correction applied to the imagery
-  * Make a user account and generate an API key [here](https://portal.opentopography.org/requestService?service=api).
 
 
 ## Ackowledgments
