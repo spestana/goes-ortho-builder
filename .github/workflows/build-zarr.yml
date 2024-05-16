@@ -131,6 +131,7 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+      
       - name: Install Conda environment with Micromamba
         uses: mamba-org/setup-micromamba@v1
         with:
@@ -138,6 +139,7 @@ jobs:
           environment-file: environment.yml
           init-shell: bash
           environment-name: goesenv
+      
       - name: Make request file from user input
         env:
           OPENTOPO_API_KEY: ${{ secrets.OPENTOPO_API_KEY }}
@@ -148,12 +150,15 @@ jobs:
           [${{ inputs.min_lon }}, ${{ inputs.min_lat }}, ${{ inputs.max_lon }}, ${{ inputs.max_lat }}], \
           '${{ inputs.satellite }}', '${{ inputs.product }}', ${{ inputs.band }}, '${{ inputs.variable }}', '${{ secrets.OPENTOPO_API_KEY }}')"
         shell: micromamba-shell {0}
+      
       - name: Download GOES imagery and build zarr file
         run: |
           python -c "\
           import goes_ortho as go; \
           go.get_data.build_zarr('goes-build-zarr.json')"
         shell: micromamba-shell {0}
+      
+      # https://words.yuvi.in/post/python-in-github-actions/
       - name: Make preview gif animation
         shell:  bash -el -c "python -u {0}"
         run: |
