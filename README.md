@@ -29,3 +29,4 @@ This repository allows you to run [goespy](https://github.com/spestana/goes-py) 
 * [University of Washington eScience Winter Incubator 2024](https://escience.washington.edu/incubator-24-glacial-lakes/)
 * This was developed using the [actions-batch-demo](https://github.com/relativeorbit/actions-batch-demo)
 * Improvements to GOES data processing with zarr from [summerfog](https://github.com/autumn-yng/summerfog) REU project at UW Friday Harbor Labs
+* Utilities from [Geospatial Time Series Analysis](https://github.com/friedrichknuth/gtsa)
