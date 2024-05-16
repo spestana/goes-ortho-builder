@@ -6,7 +6,7 @@ You can fork this repository and add your own secrets, then manually run the wor
 
 ## Configuration
 
-The workflow requires the following Actions secret:
+The workflow requires the following [Actions secret](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions):
 * `OPENTOPO_API_KEY`
   * This allows the utilities to download a DEM from [OpenTopography.org](https://www.opentopography.org/), used for the terrain correction applied to the imagery
   * Make a user account and generate an API key [here](https://portal.opentopography.org/requestService?service=api).
