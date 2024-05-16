@@ -6,9 +6,10 @@ You can fork this repository and add your own secrets, then manually run the wor
 
 ## Configuration
 
-* The workflow requires the following Actions secrets. Links below to set up free accounts with these data providers.
-  * `OPENTOPO_API_KEY` to download a DEM from [OpenTopography.org](https://www.opentopography.org/), used for the terrain correction applied to the imagery
-    * Make a user account and generate an API key [here](https://portal.opentopography.org/requestService?service=api).
+The workflow requires the following Actions secret:
+* `OPENTOPO_API_KEY`
+  * This allows the utilities to download a DEM from [OpenTopography.org](https://www.opentopography.org/), used for the terrain correction applied to the imagery
+  * Make a user account and generate an API key [here](https://portal.opentopography.org/requestService?service=api).
 
 
 ## Ackowledgments
