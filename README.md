@@ -20,6 +20,8 @@ This repository allows you to run [goespy](https://github.com/spestana/goes-py) 
   * **product**: ABI imagery product (currently limited to top of atmosphere radiance products for CONUS and Full Disk)
   * **band**: ABI band if applicable for the selected product (otherwise this field is ignored, spatial resolutions vary by band)
   * **variable**: Variable from the selected product if applicable (otherwise this field is ignored, currently limited to Radiance and Data Quality Field variables)
+* The time it takes for the workflow to run depends on the product, band, spatial extents, and start & end times. Progress can be monitored by clicking on the 'goes-build-zarr' job within the 'Build' run.
+* Upon completion, you will see an item under *Artifacts*. This is a zip folder containing the zarr file, a json file specifying the details of the workflow run, and a gif animation to preview the imagery.
 
 
 
