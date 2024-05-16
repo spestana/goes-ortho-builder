@@ -9,17 +9,17 @@ This repository allows you to run [goespy](https://github.com/spestana/goes-py) 
 * Create an [Actions secret](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions) for this API key: `OPENTOPO_API_KEY` (This allows the workflow to download a DEM from OpenTopography.org, used for the terrain correction applied to the imagery)
 * Under the *Actions* repository tab, click on the *Build* workflow
 * Select the *Run workflow* dropdown menu, and specify the required information:
-  * **Use workflow from**: Branch: main
+  * **Use workflow from**: Branch: main (there is currently only one version of this workflow)
   * **startDatetime**: starting date and time to get GOES imagery (in the format `YYYY-MM-DDThh:mm:ssZ`, all times UTC)
   * **endDatetime**: end date and time to get GOES imagery
-  * **min_lon**: minimum longitude bound of the region to retrieve imagery for
+  * **min_lon**: minimum longitude bound of the region to retrieve imagery of
   * **min_lat**: minimum latitude bound
   * **max_lon**: maximum longitude bound
   * **max_lat**: maximum longitude bound
-  * **satellite**: goes16, goes17, or goes18 (
+  * **satellite**: goes16, goes17, or goes18 (each satellite has different dates of data availiability, view angles, and varying spatial resolutions)
   * **product**: ABI imagery product (currently limited to top of atmosphere radiance products for CONUS and Full Disk)
-  * **band**: ABI band if applicable for the selected product (otherwise this field is ignored)
-  * **variable**: Variable from the selected product if applicable (otherwise this field is ignored) (currently limited to Radiance and Data Quality Field variables)
+  * **band**: ABI band if applicable for the selected product (otherwise this field is ignored, spatial resolutions vary by band)
+  * **variable**: Variable from the selected product if applicable (otherwise this field is ignored, currently limited to Radiance and Data Quality Field variables)
 
 
 
