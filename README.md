@@ -1,7 +1,7 @@
 # GOES Ortho Builder
 This repository allows you to run [goespy](https://github.com/spestana/goes-py) and [goes-ortho](https://github.com/spestana/goes-ortho) utilities to download, orthorectify (apply a terrain correction), and build a zarr file of GOES-R ABI imagery through a Github Actions interface.
 
-You can fork this repository and add your own secrets, then manually run the workflow from the '[Actions](https://github.com/spestana/goes-ortho-builder/actions/workflows/build-zarr.yml)' repository tab.
+You can fork this repository and add your own `OPENTOPO_API_KEY`, then manually run the workflow from the '[Actions](https://github.com/spestana/goes-ortho-builder/actions/workflows/build-zarr.yml)' repository tab.
 
 
 ## Configuration
