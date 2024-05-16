@@ -1,11 +1,9 @@
-# actions-batch-demo
-Demo repository for batch processing with Github Actions
+# GOES Ortho Builder
+This repository allows you to run [goespy](https://github.com/spestana/goes-py) and [goes-ortho](https://github.com/spestana/goes-ortho) utilities to download, orthorectify (apply a terrain correction), and build a zarr file of GOES-R ABI imagery through a Github Actions interface.
 
 NOTE: you must be a member of this GitHub organization to successfully run the commands below, or you can fork this repository and add your own secrets.
 
 Install the [GitHub actions CLI](https://cli.github.com) in order to easily run workflows from the command line. Alternatively you can manually run workflows from the 'Actions' repository tab. 
-
-This example workflow processes 2 public satellite images with open source software. The software uses multiprocessing to take advange of multiple CPU-cores, takes about 5 minutes to run, and generates about 30MB of output images.
 
 ## Run single workflow
 
@@ -123,10 +121,10 @@ gh run download 8073568114 --dir /tmp --pattern "*20200220*"
 ## Configuration
 
 * The workflow requires the following Actions secrets. Links below to set up free accounts with these data providers.
-  * `EARTHDATA_USERNAME` & `EARTHDATA_PASSWORD` (to download S1 Images from ASF DAAC https://urs.earthdata.nasa.gov)
-    * You must also agree to the EULA [here](https://auth.asf.alaska.edu/)
-  * `ESA_USERNAME` & `ESA_PASSWORD` (to download Sentinel-1 precise orbits from https://dataspace.copernicus.eu)
+  * `OPENTOPO_API_KEY` to download a DEM from [OpenTopography.org](https://www.opentopography.org/), used for the terrain correction applied to the imagery
+    * Make a user account and generate an API key [here](https://portal.opentopography.org/requestService?service=api).
 
 
 ## Ackowledgments
-[University of Washington eScience Winter Incubator 2024](https://escience.washington.edu/incubator-24-glacial-lakes/)
+* [University of Washington eScience Winter Incubator 2024](https://escience.washington.edu/incubator-24-glacial-lakes/)
+* This was developed using the [actions-batch-demo](https://github.com/relativeorbit/actions-batch-demo)
