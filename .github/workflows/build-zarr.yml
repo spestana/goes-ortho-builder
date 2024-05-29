@@ -8,12 +8,12 @@ on:
         type: string
         required: true
         description: startDatetime
-        default: '2024-03-10T00:00:00Z'
+        default: '2024-05-10T00:00:00Z'
       endDatetime:
         type: string
         required: true
         description: endDatetime
-        default: '2024-03-10T00:59:00Z'
+        default: '2024-05-10T00:59:00Z'
       min_lon:
         type: string
         required: true
