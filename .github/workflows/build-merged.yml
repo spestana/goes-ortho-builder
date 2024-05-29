@@ -34,15 +34,15 @@ on:
         required: true
         description: max_lat
         default: 47.1
-      satellite:
-        type: choice
-        required: true
-        description: satellite
-        default: goes18
-        options:
-          - goes16
-          - goes17
-          - goes18
+      #satellite:
+      #  type: choice
+      #  required: true
+      #  description: satellite
+      #  default: goes18
+      #  options:
+      #    - goes16
+      #    - goes17
+      #    - goes18
       product:
         type: choice
         required: true
@@ -106,9 +106,9 @@ on:
       max_lat:
         type: string
         description: max_lat
-      satellite:
-        type: string
-        description: satellite
+      #satellite:
+      #  type: string
+      #  description: satellite
       product:
         type: string
         description: product
