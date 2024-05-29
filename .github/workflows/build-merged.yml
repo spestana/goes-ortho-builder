@@ -148,7 +148,7 @@ jobs:
           import goes_ortho as go; \
           go.get_data.make_request_json('goes16-build-zarr', '${{ inputs.startDatetime }}', '${{ inputs.endDatetime }}', \
           [${{ inputs.min_lon }}, ${{ inputs.min_lat }}, ${{ inputs.max_lon }}, ${{ inputs.max_lat }}], \
-          'goes16', '${{ inputs.product }}', ${{ inputs.band }}, '${{ inputs.variable }}', '${{ secrets.OPENTOPO_API_KEY }}')"
+          'goes16', '${{ inputs.product }}', ${{ inputs.band }}, '${{ inputs.variable }}', '${{ secrets.OPENTOPO_API_KEY }}'); \
           go.get_data.make_request_json('goes18-build-zarr', '${{ inputs.startDatetime }}', '${{ inputs.endDatetime }}', \
           [${{ inputs.min_lon }}, ${{ inputs.min_lat }}, ${{ inputs.max_lon }}, ${{ inputs.max_lat }}], \
           'goes18', '${{ inputs.product }}', ${{ inputs.band }}, '${{ inputs.variable }}', '${{ secrets.OPENTOPO_API_KEY }}')"
@@ -158,7 +158,7 @@ jobs:
         run: |
           python -c "\
           import goes_ortho as go; \
-          go.get_data.build_zarr('goes16-build-zarr.json')"
+          go.get_data.build_zarr('goes16-build-zarr.json'); \
           go.get_data.build_zarr('goes18-build-zarr.json')"
         shell: micromamba-shell {0}
       
