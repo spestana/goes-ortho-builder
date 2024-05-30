@@ -41,7 +41,7 @@ This repository allows you to run [goespy](https://github.com/spestana/goes-py) 
 * The time it takes for the workflow to run depends on the product, band, spatial extents, and start & end times. Progress can be monitored by clicking on the 'goes-build-zarr' job within the 'Build' run.
 * Upon completion, you will see an item within the action run under *Artifacts*. This is a zip folder containing three zarr files, two json files specifying the details of the workflow run that downloaded goes16 and goes18 imagery, and three gif animations to preview the imagery.
 
-
+![GOES-Merged Example](/img/example.gif "GOES-Merged Example")
 
 ## Ackowledgments
 * [University of Washington eScience Winter Incubator 2024](https://escience.washington.edu/incubator-24-glacial-lakes/)
