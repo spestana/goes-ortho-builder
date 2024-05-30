@@ -44,13 +44,10 @@ on:
       #    - goes17
       #    - goes18
       product:
-        type: choice
+        type: string
         required: true
         description: product
-        default: ABI-L1b-RadC
-        options:
-          - ABI-L1b-RadC
-          - ABI-L1b-RadF
+        default: 'ABI-L1b-RadC'
       band:
         type: choice
         required: true
@@ -74,13 +71,10 @@ on:
           - '15'
           - '16'
       variable:
-        type: choice
+        type: string
         required: true
         description: variable
-        default: Rad
-        options:
-          - Rad
-          - DQF
+        default: 'Rad'
       #workflow_name:
       #  description: Custom workflow name
       #  required: false
