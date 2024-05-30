@@ -7,7 +7,6 @@ This repository allows you to run [goespy](https://github.com/spestana/goes-py) 
 * Fork this repository
 * Make a user account and generate an API key for [OpenTopography.org](https://portal.opentopography.org/requestService?service=api)
 * Create an [Actions secret](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions) for this API key: `OPENTOPO_API_KEY` (This allows the workflow to download a DEM from OpenTopography.org, used for the terrain correction applied to the imagery)
-* Under the *Actions* repository tab, there are currently two workflows:
 
 ### Build
 * Under the *Actions* repository tab, click on the *Build* workflow
