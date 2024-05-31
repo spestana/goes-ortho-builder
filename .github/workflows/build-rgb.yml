@@ -1,0 +1,200 @@
+---
+name: Build Merged
+run-name: ${{ inputs.workflow_name }}
+on:
+  workflow_dispatch:
+    inputs:
+      startDatetime:
+        type: string
+        required: true
+        description: startDatetime
+        default: '2024-05-10T00:00:00Z'
+      endDatetime:
+        type: string
+        required: true
+        description: endDatetime
+        default: '2024-05-10T00:59:00Z'
+      min_lon:
+        type: string
+        required: true
+        description: min_lon
+        default: -122.12
+      min_lat:
+        type: string
+        required: true
+        description: min_lat
+        default: 46.6
+      max_lon:
+        type: string
+        required: true
+        description: max_lon
+        default: -121.35
+      max_lat:
+        type: string
+        required: true
+        description: max_lat
+        default: 47.1
+      #satellite:
+      #  type: choice
+      #  required: true
+      #  description: satellite
+      #  default: goes18
+      #  options:
+      #    - goes16
+      #    - goes17
+      #    - goes18
+      product:
+        type: choice
+        required: true
+        description: product
+        default: ABI-L1b-RadC
+        options:
+          - ABI-L1b-RadC
+          - ABI-L1b-RadF
+      #band:
+      #  type: choice
+      #  required: true
+      #  description: band
+      #  default: '7'
+      #  options:
+      #    - '1'
+      #    - '2'
+      #    - '3'
+      #    - '4'
+      #    - '5'
+      #    - '6'
+      #    - '7'
+      #    - '8'
+      #    - '9'
+      #    - '10'
+      #    - '11'
+      #    - '12'
+      #    - '13'
+      #    - '14'
+      #    - '15'
+      #    - '16'
+      #variable:
+      #  type: string
+      #  required: true
+      #  description: variable
+      #  default: 'Rad'
+      #workflow_name:
+      #  description: Custom workflow name
+      #  required: false
+      #  default: goes-build-zarr
+      #  type: string
+  workflow_call:
+    inputs:
+      startDatetime:
+        type: string
+        description: startDatetime
+      endDatetime:
+        type: string
+        description: endDatetime
+      min_lon:
+        type: string
+        description: min_lon
+      min_lat:
+        type: string
+        description: min_lat
+      max_lon:
+        type: string
+        description: max_lon
+      max_lat:
+        type: string
+        description: max_lat
+      #satellite:
+      #  type: string
+      #  description: satellite
+      product:
+        type: string
+        description: product
+      #band:
+      #  type: string
+      #  description: band
+      #variable:
+      #  type: string
+      #  description: variable
+      #workflow_name:
+      #  description: Custom workflow name
+      #  type: string
+jobs:
+  build-zarr:
+    name: goes-build-zarr
+    runs-on: ubuntu-latest
+    defaults:
+        run:
+            shell: bash -el {0}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: Install Conda environment with Micromamba
+        uses: mamba-org/setup-micromamba@v1
+        with:
+          cache-environment: false
+          environment-file: environment.yml
+          init-shell: bash
+          environment-name: goesenv
+      
+      - name: Make request file from user input
+        env:
+          OPENTOPO_API_KEY: ${{ secrets.OPENTOPO_API_KEY }}
+        run: |
+          python -c "\
+          import goes_ortho as go; \
+          go.get_data.make_request_json('goes16-b1', '${{ inputs.startDatetime }}', '${{ inputs.endDatetime }}', \
+          [${{ inputs.min_lon }}, ${{ inputs.min_lat }}, ${{ inputs.max_lon }}, ${{ inputs.max_lat }}], \
+          'goes16', '${{ inputs.product }}', 1, 'Rad', '${{ secrets.OPENTOPO_API_KEY }}'); \
+          go.get_data.make_request_json('goes16-b2', '${{ inputs.startDatetime }}', '${{ inputs.endDatetime }}', \
+          [${{ inputs.min_lon }}, ${{ inputs.min_lat }}, ${{ inputs.max_lon }}, ${{ inputs.max_lat }}], \
+          'goes16', '${{ inputs.product }}', 2, 'Rad', '${{ secrets.OPENTOPO_API_KEY }}'); \
+          go.get_data.make_request_json('goes16-b3', '${{ inputs.startDatetime }}', '${{ inputs.endDatetime }}', \
+          [${{ inputs.min_lon }}, ${{ inputs.min_lat }}, ${{ inputs.max_lon }}, ${{ inputs.max_lat }}], \
+          'goes16', '${{ inputs.product }}', 3, 'Rad', '${{ secrets.OPENTOPO_API_KEY }}'); \
+          go.get_data.make_request_json('goes18-b1', '${{ inputs.startDatetime }}', '${{ inputs.endDatetime }}', \
+          [${{ inputs.min_lon }}, ${{ inputs.min_lat }}, ${{ inputs.max_lon }}, ${{ inputs.max_lat }}], \
+          'goes18', '${{ inputs.product }}', 1, 'Rad', '${{ secrets.OPENTOPO_API_KEY }}'); \
+          go.get_data.make_request_json('goes18-b2', '${{ inputs.startDatetime }}', '${{ inputs.endDatetime }}', \
+          [${{ inputs.min_lon }}, ${{ inputs.min_lat }}, ${{ inputs.max_lon }}, ${{ inputs.max_lat }}], \
+          'goes18', '${{ inputs.product }}', 2, 'Rad', '${{ secrets.OPENTOPO_API_KEY }}'); \
+          go.get_data.make_request_json('goes18-b3', '${{ inputs.startDatetime }}', '${{ inputs.endDatetime }}', \
+          [${{ inputs.min_lon }}, ${{ inputs.min_lat }}, ${{ inputs.max_lon }}, ${{ inputs.max_lat }}], \
+          'goes18', '${{ inputs.product }}', 3, 'Rad', '${{ secrets.OPENTOPO_API_KEY }}'); \
+          "
+        shell: micromamba-shell {0}
+      
+      - name: Download GOES imagery and build zarr file
+        run: |
+          python -c "\
+          import goes_ortho as go; \
+          go.get_data.build_zarr('goes16-b1.json'); \
+          go.get_data.build_zarr('goes16-b2.json'); \
+          go.get_data.build_zarr('goes16-b3.json'); \
+          go.get_data.build_zarr('goes18-b1.json'); \
+          go.get_data.build_zarr('goes18-b2.json'); \
+          go.get_data.build_zarr('goes18-b3.json')"
+        shell: micromamba-shell {0}
+      
+      # https://words.yuvi.in/post/python-in-github-actions/
+      - name: Make preview gif animation
+        shell:  bash -el -c "python -u {0}"
+        run: |
+          import xarray as xr
+          import geogif
+          ds16b1 = xr.open_zarr('goes16-b1.zarr')
+          ds18b1 = xr.open_zarr('goes18-b1.zarr')
+          ds16b1['time'] = ds18b1.time
+          ds18b1['${{ inputs.variable }}'] = (ds16b1.${{ inputs.variable }} + ds18b1.${{ inputs.variable }}) / 2
+          ds18b1.to_zarr('goes-merged.zarr')
+          da = ds18b1.${{ inputs.variable }}
+          gif_bytes = geogif.dgif(da, fps=5, cmap='Greys_r', date_format='%Y-%m-%d %H:%M:%S', date_position='ul', bytes=True).compute()
+          with open('goes-merged.gif', 'wb') as f:
+              f.write(gif_bytes)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: goes-build-zarr
+          path: |
+            *.json
+            *.zarr
+            *.gif
