@@ -187,7 +187,7 @@ jobs:
           ds16b1['time'] = ds18b1.time
           ds18b1['Rad'] = (ds16b1.Rad + ds18b1.Rad) / 2
           ds18b1.to_zarr('goes-merged.zarr')
-          da = ds18b1.${{ inputs.variable }}
+          da = ds18b1.Rad
           gif_bytes = geogif.dgif(da, fps=5, cmap='Greys_r', date_format='%Y-%m-%d %H:%M:%S', date_position='ul', bytes=True).compute()
           with open('goes-merged.gif', 'wb') as f:
               f.write(gif_bytes)
