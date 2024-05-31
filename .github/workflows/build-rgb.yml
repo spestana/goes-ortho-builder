@@ -185,7 +185,7 @@ jobs:
           ds16b1 = xr.open_zarr('goes16-b1.zarr')
           ds18b1 = xr.open_zarr('goes18-b1.zarr')
           ds16b1['time'] = ds18b1.time
-          ds18b1['${{ inputs.variable }}'] = (ds16b1.${{ inputs.variable }} + ds18b1.${{ inputs.variable }}) / 2
+          ds18b1['Rad'] = (ds16b1.Rad + ds18b1.Rad) / 2
           ds18b1.to_zarr('goes-merged.zarr')
           da = ds18b1.${{ inputs.variable }}
           gif_bytes = geogif.dgif(da, fps=5, cmap='Greys_r', date_format='%Y-%m-%d %H:%M:%S', date_position='ul', bytes=True).compute()
