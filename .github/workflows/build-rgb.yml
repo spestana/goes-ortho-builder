@@ -1,5 +1,5 @@
 ---
-name: Build Merged
+name: Build RGB
 run-name: ${{ inputs.workflow_name }}
 on:
   workflow_dispatch:
