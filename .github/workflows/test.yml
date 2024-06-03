@@ -1,0 +1,152 @@
+---
+name: Build
+run-name: ${{ inputs.workflow_name }}
+on:
+  workflow_dispatch:
+    inputs:
+      startDatetime:
+        type: string
+        required: true
+        description: startDatetime
+        default: '2024-05-10T00:00:00Z'
+      endDatetime:
+        type: string
+        required: true
+        description: endDatetime
+        default: '2024-05-10T00:59:00Z'
+      min_lon:
+        type: string
+        required: true
+        description: min_lon
+        default: -122.12
+      min_lat:
+        type: string
+        required: true
+        description: min_lat
+        default: 46.6
+      max_lon:
+        type: string
+        required: true
+        description: max_lon
+        default: -121.35
+      max_lat:
+        type: string
+        required: true
+        description: max_lat
+        default: 47.1
+      satellite:
+        type: choice
+        required: true
+        description: satellite
+        default: goes18
+        options:
+          - goes16
+          - goes17
+          - goes18
+      product:
+        type: choice
+        required: true
+        description: product
+        default: ABI-L1b-RadC
+        options:
+          - ABI-L1b-RadC
+          - ABI-L1b-RadF
+      band:
+        type: choice
+        required: true
+        description: band
+        default: '7'
+        options:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '12'
+          - '13'
+          - '14'
+          - '15'
+          - '16'
+      variable:
+        type: choice
+        required: true
+        description: variable
+        default: Rad
+        options:
+          - Rad
+          - DQF
+      #workflow_name:
+      #  description: Custom workflow name
+      #  required: false
+      #  default: goes-build-zarr
+      #  type: string
+  workflow_call:
+    inputs:
+      startDatetime:
+        type: string
+        description: startDatetime
+      endDatetime:
+        type: string
+        description: endDatetime
+      min_lon:
+        type: string
+        description: min_lon
+      min_lat:
+        type: string
+        description: min_lat
+      max_lon:
+        type: string
+        description: max_lon
+      max_lat:
+        type: string
+        description: max_lat
+      satellite:
+        type: string
+        description: satellite
+      product:
+        type: string
+        description: product
+      band:
+        type: string
+        description: band
+      variable:
+        type: string
+        description: variable
+      #workflow_name:
+      #  description: Custom workflow name
+      #  type: string
+jobs:
+  build-zarr:
+    name: goes-build-zarr
+    runs-on: ubuntu-latest
+    defaults:
+        run:
+            shell: bash -el {0}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: Install Conda environment with Micromamba
+        uses: mamba-org/setup-micromamba@v1
+        with:
+          cache-environment: false
+          environment-file: environment.yml
+          init-shell: bash
+          environment-name: goesenv
+            
+      - name: run test script
+        run: |
+          python test.py
+        shell: micromamba-shell {0}
+      
+      - uses: actions/upload-artifact@v4
+        with:
+          name: goes-build-zarr
+          path: |
+            *.txt
