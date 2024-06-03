@@ -1,0 +1,32 @@
+---
+name: Test
+run-name: test
+
+jobs:
+  build:
+    name: test-job
+    runs-on: ubuntu-latest
+    defaults:
+        run:
+            shell: bash -el {0}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: Install Conda environment with Micromamba
+        uses: mamba-org/setup-micromamba@v1
+        with:
+          cache-environment: false
+          environment-file: environment.yml
+          init-shell: bash
+          environment-name: goesenv
+
+      - name: run test script
+        run: |
+          python test.py
+        shell: micromamba-shell {0}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: test-job
+          path: |
+            *.txt
