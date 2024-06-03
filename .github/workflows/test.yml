@@ -1,5 +1,5 @@
 ---
-name: Build
+name: test
 run-name: ${{ inputs.workflow_name }}
 on:
   workflow_dispatch:
