@@ -127,9 +127,17 @@ jobs:
           for band in range(1,17):
             print('make file goes_east-b{}-build-zarr'.format(band))
             go.get_data.make_request_json('goes_east-b{}-build-zarr'.format(band), '${{ inputs.startDatetime }}', '${{ inputs.endDatetime }}', [${{ inputs.min_lon }}, ${{ inputs.min_lat }}, ${{ inputs.max_lon }}, ${{ inputs.max_lat }}], '${{ inputs.satellite_east }}', '${{ inputs.product }}', band, '${{ inputs.variable }}', '${{ secrets.OPENTOPO_API_KEY }}')
-            go.get_data.build_zarr('goes_east-b{}-build-zarr.json'.format(band))
             print('make file goes_west-b{}-build-zarr'.format(band))
             go.get_data.make_request_json('goes_west-b{}-build-zarr'.format(band), '${{ inputs.startDatetime }}', '${{ inputs.endDatetime }}', [${{ inputs.min_lon }}, ${{ inputs.min_lat }}, ${{ inputs.max_lon }}, ${{ inputs.max_lat }}], '${{ inputs.satellite_west }}', '${{ inputs.product }}', band, '${{ inputs.variable }}', '${{ secrets.OPENTOPO_API_KEY }}')
+
+      - name: Download GOES imagery, and build zarr files
+        shell:  bash -el -c "python -u {0}"
+        run: |
+          import goes_ortho as go
+          for band in range(1,17):
+            print('download goes_east-b{}-build-zarr'.format(band))
+            go.get_data.build_zarr('goes_east-b{}-build-zarr.json'.format(band))
+            print('download goes_west-b{}-build-zarr'.format(band))
             go.get_data.build_zarr('goes_west-b{}-build-zarr.json'.format(band))
       
       # https://words.yuvi.in/post/python-in-github-actions/
