@@ -34,15 +34,21 @@ on:
         required: true
         description: max_lat
         default: 47.1
-      #satellite:
-      #  type: choice
-      #  required: true
-      #  description: satellite
-      #  default: goes18
-      #  options:
-      #    - goes16
-      #    - goes17
-      #    - goes18
+      satellite_east:
+        type: choice
+        required: true
+        description: GOES-East satellite
+        default: goes16
+        options:
+          - goes16
+      satellite_west:
+        type: choice
+        required: true
+        description: GOES-West satellite
+        default: goes18
+        options:
+          - goes17
+          - goes18
       product:
         type: string
         required: true
@@ -78,9 +84,12 @@ on:
       max_lat:
         type: string
         description: max_lat
-      #satellite:
-      #  type: string
-      #  description: satellite
+      satellite_east:
+        type: string
+        description: GOES-East satellite
+      satellite_west:
+        type: string
+        description: GOES-West satellite
       product:
         type: string
         description: product
@@ -112,26 +121,20 @@ jobs:
       - name: Make request file from user input
         env:
           OPENTOPO_API_KEY: ${{ secrets.OPENTOPO_API_KEY }}
+        shell:  bash -el -c "python -u {0}"
         run: |
-          python -c "\
-          import goes_ortho as go; \
-          for band in range(1,17): \
-            go.get_data.make_request_json('goes16-b{}-build-zarr'.format(band), '${{ inputs.startDatetime }}', '${{ inputs.endDatetime }}', \
-          [${{ inputs.min_lon }}, ${{ inputs.min_lat }}, ${{ inputs.max_lon }}, ${{ inputs.max_lat }}], \
-          'goes16', '${{ inputs.product }}', band, '${{ inputs.variable }}', '${{ secrets.OPENTOPO_API_KEY }}'); \
-            go.get_data.make_request_json('goes18-b{}-build-zarr'.format(band), '${{ inputs.startDatetime }}', '${{ inputs.endDatetime }}', \
-          [${{ inputs.min_lon }}, ${{ inputs.min_lat }}, ${{ inputs.max_lon }}, ${{ inputs.max_lat }}], \
-          'goes18', '${{ inputs.product }}', band, '${{ inputs.variable }}', '${{ secrets.OPENTOPO_API_KEY }}')"
-        shell: micromamba-shell {0}
+          import goes_ortho as go
+          for band in range(1,17):
+            go.get_data.make_request_json('goes_east-b{}-build-zarr'.format(band), '${{ inputs.startDatetime }}', '${{ inputs.endDatetime }}', [${{ inputs.min_lon }}, ${{ inputs.min_lat }}, ${{ inputs.max_lon }}, ${{ inputs.max_lat }}], '${{ inputs.satellite_east }}', '${{ inputs.product }}', band, '${{ inputs.variable }}', '${{ secrets.OPENTOPO_API_KEY }}');
+            go.get_data.make_request_json('goes_west-b{}-build-zarr'.format(band), '${{ inputs.startDatetime }}', '${{ inputs.endDatetime }}', [${{ inputs.min_lon }}, ${{ inputs.min_lat }}, ${{ inputs.max_lon }}, ${{ inputs.max_lat }}], '${{ inputs.satellite_west }}', '${{ inputs.product }}', band, '${{ inputs.variable }}', '${{ secrets.OPENTOPO_API_KEY }}')"
       
       - name: Download GOES imagery and build zarr file
+        shell:  bash -el -c "python -u {0}"
         run: |
-          python -c "\
-          import goes_ortho as go; \
-          for band in range(1,17): \
-            go.get_data.build_zarr('goes16-b{}-build-zarr'.format(band)); \
-            go.get_data.build_zarr('goes18-b{}-build-zarr'.format(band))"
-        shell: micromamba-shell {0}
+          import goes_ortho as go
+          for band in range(1,17):
+            go.get_data.build_zarr('goes_east-b{}-build-zarr'.format(band))
+            go.get_data.build_zarr('goes_west-b{}-build-zarr'.format(band))
       
       # https://words.yuvi.in/post/python-in-github-actions/
       - name: Make preview gif animation
@@ -140,15 +143,15 @@ jobs:
           import xarray as xr
           import geogif
           for band in range(1,17): \
-            ds16 = xr.open_zarr('goes16-b{}-build-zarr.zarr'.format(band))
+            ds16 = xr.open_zarr('goes_east-b{}-build-zarr.zarr'.format(band))
             da = ds16.${{ inputs.variable }}
             gif_bytes = geogif.dgif(da, fps=5, cmap='Greys_r', date_format='%Y-%m-%d %H:%M:%S', date_position='ul', bytes=True).compute()
-            with open('goes16-b{}.gif'.format(band), 'wb') as f:
+            with open('goes_east-b{}.gif'.format(band), 'wb') as f:
                 f.write(gif_bytes)
-            ds18 = xr.open_zarr('goes18-b{}-build-zarr.zarr'.format(band))
+            ds18 = xr.open_zarr('goes_west-b{}-build-zarr.zarr'.format(band))
             da = ds18.${{ inputs.variable }}
             gif_bytes = geogif.dgif(da, fps=5, cmap='Greys_r', date_format='%Y-%m-%d %H:%M:%S', date_position='ul', bytes=True).compute()
-            with open('goes18-b{}.gif'.format(band), 'wb') as f:
+            with open('goes_west-b{}.gif'.format(band), 'wb') as f:
                 f.write(gif_bytes)
             ds16['time'] = ds18.time
             ds18['${{ inputs.variable }}'] = (ds16.${{ inputs.variable }} + ds18.${{ inputs.variable }}) / 2
@@ -157,6 +160,7 @@ jobs:
             gif_bytes = geogif.dgif(da, fps=5, cmap='Greys_r', date_format='%Y-%m-%d %H:%M:%S', date_position='ul', bytes=True).compute()
             with open('goes-b{}-merged.gif'.format(band), 'wb') as f:
                 f.write(gif_bytes)
+      
       - uses: actions/upload-artifact@v4
         with:
           name: goes-build-zarr
