@@ -1,5 +1,5 @@
 ---
-name: Build
+name: Build-coiled
 run-name: ${{ inputs.workflow_name }}
 on:
   workflow_dispatch:
